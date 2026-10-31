@@ -15,6 +15,7 @@
  */
 
 #include "faiss_c.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -121,6 +122,9 @@ FAISS_DECLARE_GETTER(PCAMatrix, int, balanced_bins)
 
 /// Setter for balanced_bins
 FAISS_DECLARE_SETTER(PCAMatrix, int, balanced_bins)
+
+// Getter and setter for max_points_per_d
+FAISS_DECLARE_GETTER_SETTER(PCAMatrix, size_t, max_points_per_d)
 
 FAISS_DECLARE_CLASS_INHERITED(ITQMatrix, VectorTransform)
 FAISS_DECLARE_DESTRUCTOR(ITQMatrix)

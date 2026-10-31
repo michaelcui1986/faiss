@@ -20,10 +20,21 @@ using faiss::IDSelector;
 using faiss::IDSelectorAnd;
 using faiss::IDSelectorBatch;
 using faiss::IDSelectorBitmap;
+using faiss::DocIDSelectorBitmap;
+using faiss::DocIDSelectorBitlist;
 using faiss::IDSelectorNot;
 using faiss::IDSelectorOr;
 using faiss::IDSelectorRange;
 using faiss::IDSelectorXOr;
+using faiss::IDSelectorField_LT;
+using faiss::IDSelectorField_LTE;
+using faiss::IDSelectorField_GT;
+using faiss::IDSelectorField_GTE;
+using faiss::IDSelectorField_EQ;
+using faiss::IDSelectorField_NE;
+using faiss::IDSelectorField_BITAND;
+using faiss::IDSelectorAll;
+using faiss::IDSelectorNone;
 using faiss::RangeQueryResult;
 using faiss::RangeSearchPartialResult;
 using faiss::RangeSearchResult;
@@ -137,6 +148,54 @@ int faiss_IDSelectorBitmap_new(
     CATCH_AND_HANDLE
 }
 
+int faiss_DocIDSelectorBitmap_new(
+        FaissDocIDSelectorBitmap **p_sel,
+       size_t nids, const uint32_t *idmap,
+        size_t nbytes, const uint8_t *bitmap) {
+    try {
+        *p_sel = reinterpret_cast<FaissDocIDSelectorBitmap *>(
+                new DocIDSelectorBitmap(nids, idmap, nbytes, bitmap));
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_DocIDSelectorBitmapInverted_new(
+    FaissDocIDSelectorBitmap **p_sel,
+    size_t nids, const uint32_t *idmap,
+    size_t nbytes, const uint8_t *bitmap) {
+    try {
+        *p_sel = reinterpret_cast<FaissDocIDSelectorBitmap *>(
+                new DocIDSelectorBitmap(nids, idmap, nbytes, bitmap, true));
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_DocIDSelectorBitlist_new(
+    FaissDocIDSelectorBitlist **p_sel,
+    size_t nids, const uint32_t *idmap,
+    size_t npositions, const uint32_t *positions) {
+    try {
+        *p_sel = reinterpret_cast<FaissDocIDSelectorBitlist *>(
+                new DocIDSelectorBitlist(nids, idmap, npositions, positions));
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_DocIDSelectorBitlistInverted_new(
+    FaissDocIDSelectorBitlist **p_sel,
+    size_t nids, const uint32_t *idmap,
+    size_t npositions, const uint32_t *positions) {
+    try {
+        *p_sel = reinterpret_cast<FaissDocIDSelectorBitlist *>(
+                new DocIDSelectorBitlist(nids, idmap, npositions, positions, true));
+        return 0;
+    }
+    CATCH_AND_HANDLE
+}
+
 int faiss_IDSelectorNot_new(
         FaissIDSelectorNot** p_sel,
         const FaissIDSelector* sel) {
@@ -182,6 +241,373 @@ int faiss_IDSelectorXOr_new(
     }
     CATCH_AND_HANDLE
 }
+
+int faiss_IDSelectorField_new_LT_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LT<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LT_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LT<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LT_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LT<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LT_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LT<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LTE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LTE<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LTE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LTE<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LTE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LTE<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_LTE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_LTE<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GT_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GT<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GT_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GT<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GT_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GT<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GT_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GT<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GTE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GTE<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GTE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GTE<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GTE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GTE<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_GTE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_GTE<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_EQ_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_EQ<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_EQ_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_EQ<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_EQ_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_EQ<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_EQ_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_EQ<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_NE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_NE<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_NE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_NE<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_NE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_NE<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_NE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_NE<float>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_BITAND_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_BITAND<uint8_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_BITAND_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_BITAND<int16_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorField_new_BITAND_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t field_offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector*>(
+            new IDSelectorField_BITAND<int32_t>(
+                doc_size, field_offset, doc_bytes, doc_ids, value));
+    }
+    CATCH_AND_HANDLE
+}
+
+int faiss_IDSelectorAll_new(FaissIDSelector **p_sel) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector *>(new IDSelectorAll());
+    }
+    CATCH_AND_HANDLE
+}
+DEFINE_DESTRUCTOR(IDSelectorAll)
+
+int faiss_IDSelectorNone_new(FaissIDSelector **p_sel) {
+    try {
+        *p_sel = reinterpret_cast<FaissIDSelector *>(new IDSelectorNone());
+    }
+    CATCH_AND_HANDLE
+}
+DEFINE_DESTRUCTOR(IDSelectorNone)
 
 // Below are structures used only by Index implementations
 

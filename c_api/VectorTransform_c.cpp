@@ -124,6 +124,10 @@ DEFINE_GETTER(PCAMatrix, int, balanced_bins)
 
 DEFINE_SETTER(PCAMatrix, int, balanced_bins)
 
+DEFINE_GETTER(PCAMatrix, size_t, max_points_per_d)
+
+DEFINE_SETTER(PCAMatrix, size_t, max_points_per_d)
+
 /*********************************************
  * ITQMatrix
  *********************************************/

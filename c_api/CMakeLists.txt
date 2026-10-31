@@ -107,6 +107,13 @@ if(NOT WIN32)
   endif()
 endif()
 
+# Disambiguate this build from Argos FAISS 1.x
+foreach(lib faiss_c faiss_c_avx2 faiss_c_avx512 faiss_c_avx512_spr faiss_c_sve)
+  set_target_properties(${lib} PROPERTIES
+    OUTPUT_NAME "${lib}_knn"
+  )
+endforeach()
+
 function(faiss_install_headers headers p)
   foreach(h ${headers})
     get_filename_component(f ${h} DIRECTORY)

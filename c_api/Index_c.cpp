@@ -221,4 +221,19 @@ int faiss_Index_sa_decode(
     }
     CATCH_AND_HANDLE
 }
+
+int faiss_Index_compute_distances(
+    const FaissIndex *index,
+    idx_t n,
+    const float *x,
+    idx_t label,
+    idx_t num_labels,
+    float *distances) {
+    try {
+        reinterpret_cast<const faiss::Index *>(index)->compute_distances(
+            n, x, label, num_labels, distances);
+    }
+    CATCH_AND_HANDLE
+}
+    
 }

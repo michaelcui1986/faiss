@@ -107,6 +107,15 @@ int faiss_read_index_binary_custom(
 int faiss_read_VectorTransform_fname(
         const char* fname,
         FaissVectorTransform** p_out);
+
+/** Write vector transform to a file.
+ * This is equivalent to `faiss::write_VectorTransform` when a file path is
+ * provided.
+ */
+int faiss_write_VectorTransform_fname(
+        const FaissVectorTransform* idx,
+        const char* fname);
+
 #ifdef __cplusplus
 }
 #endif

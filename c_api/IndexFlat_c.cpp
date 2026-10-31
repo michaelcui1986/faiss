@@ -131,6 +131,27 @@ DEFINE_SETTER(IndexRefineFlat, int, own_fields)
 DEFINE_GETTER(IndexRefineFlat, float, k_factor)
 DEFINE_SETTER(IndexRefineFlat, float, k_factor)
 
+DEFINE_GETTER_PERMISSIVE(IndexRefineFlat, FaissIndex*, base_index)
+
+DEFINE_INDEX_DOWNCAST(IndexRefine)
+DEFINE_GETTER(IndexRefine, float, k_factor)
+DEFINE_GETTER_PERMISSIVE(IndexRefine, FaissIndex*, base_index)
+
+int faiss_IndexRefineSearchParameters_new_with(
+        FaissIndexRefineSearchParameters** p_sp,
+        float k_factor,
+        FaissSearchParameters* base_index_params) {
+    try {
+        faiss::IndexRefineSearchParameters* sp =
+                new faiss::IndexRefineSearchParameters();
+        sp->k_factor = k_factor;
+        sp->base_index_params =
+                reinterpret_cast<faiss::SearchParameters*>(base_index_params);
+        *p_sp = reinterpret_cast<FaissIndexRefineSearchParameters*>(sp);
+    }
+    CATCH_AND_HANDLE
+}
+
 DEFINE_DESTRUCTOR(IndexFlat1D)
 DEFINE_INDEX_DOWNCAST(IndexFlat1D)
 

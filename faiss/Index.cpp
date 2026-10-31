@@ -15,6 +15,7 @@
 #include <faiss/utils/distances.h>
 
 #include <cstring>
+#include <memory>
 
 namespace faiss {
 
@@ -161,11 +162,28 @@ void Index::add_sa_codes(idx_t, const uint8_t*, const idx_t*) {
     FAISS_THROW_MSG("add_sa_codes not implemented for this type of index");
 }
 
+void Index::compute_distances(
+        idx_t n,
+        const float* x,
+        idx_t label,
+        idx_t num_labels,
+        float* distances) const {
+    auto dc = std::unique_ptr<DistanceComputer>(get_distance_computer());
+    for (idx_t i = 0; i < n; i++) {
+        idx_t offset = i * num_labels;
+        dc->set_query(x + i * d);
+        for (idx_t l = 0; l < num_labels; l++) {
+            distances[l + offset] = (*dc)(l + label);
+        }
+    }
+}
+
 namespace {
 
 // storage that explicitly reconstructs vectors before computing distances
 struct GenericDistanceComputer : DistanceComputer {
     size_t d;
+    MetricType metric_type;
     const Index& storage;
     std::vector<float> buf;
     const float* q = nullptr;
@@ -173,18 +191,33 @@ struct GenericDistanceComputer : DistanceComputer {
     explicit GenericDistanceComputer(const Index& storage_in)
             : storage(storage_in) {
         d = storage.d;
+        metric_type = storage.metric_type;
         buf.resize(d * 2);
     }
 
     float operator()(idx_t i) override {
         storage.reconstruct(i, buf.data());
-        return fvec_L2sqr(q, buf.data(), d);
+        switch (metric_type) {
+            case METRIC_L2:
+                return fvec_L2sqr(q, buf.data(), d);
+            case METRIC_INNER_PRODUCT:
+                return fvec_inner_product(q, buf.data(), d);
+            default:
+                FAISS_THROW_MSG("Only L2 and Inner Product are supported");
+        }
     }
 
     float symmetric_dis(idx_t i, idx_t j) override {
         storage.reconstruct(i, buf.data());
         storage.reconstruct(j, buf.data() + d);
-        return fvec_L2sqr(buf.data() + d, buf.data(), d);
+        switch (metric_type) {
+            case METRIC_L2:
+                return fvec_L2sqr(buf.data() + d, buf.data(), d);
+            case METRIC_INNER_PRODUCT:
+                return fvec_inner_product(buf.data() + d, buf.data(), d);
+            default:
+                FAISS_THROW_MSG("Only L2 and Inner Product are supported");
+        }
     }
 
     void set_query(const float* x) override {
@@ -195,10 +228,10 @@ struct GenericDistanceComputer : DistanceComputer {
 } // namespace
 
 DistanceComputer* Index::get_distance_computer() const {
-    if (metric_type == METRIC_L2) {
+    if ((metric_type == METRIC_L2) || (metric_type == METRIC_INNER_PRODUCT)) {
         return new GenericDistanceComputer(*this);
     } else {
-        FAISS_THROW_MSG("get_distance_computer() not implemented");
+        FAISS_THROW_MSG("get_distance_computer() only implemented for L2 and Inner Product");
     }
 }
 
