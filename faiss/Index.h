@@ -314,6 +314,20 @@ struct Index {
      * @param xids   corresponding ids, size n
      */
     virtual void add_sa_codes(idx_t n, const uint8_t* codes, const idx_t* xids);
+
+    /** compute distances between a set of queries and consecutive labels (ids)
+     * @param n          number of vectors
+     * @param x          input vectors to search, size n * d
+     * @param label      first input label
+     * @param num_labels number of consecutive labels to measure
+     * @param distances  output pairwise distances, size n * num_labels
+     */
+    virtual void compute_distances(
+        idx_t n,
+        const float *x,
+        idx_t label,
+        idx_t num_labels,
+        float *distances) const;
 };
 
 } // namespace faiss

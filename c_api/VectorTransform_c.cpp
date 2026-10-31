@@ -120,6 +120,10 @@ DEFINE_GETTER(PCAMatrix, float, eigen_power)
 
 DEFINE_GETTER(PCAMatrix, int, random_rotation)
 
+DEFINE_GETTER(PCAMatrix, size_t, max_points_per_d)
+
+DEFINE_SETTER(PCAMatrix, size_t, max_points_per_d)
+
 /*********************************************
  * ITQMatrix
  *********************************************/

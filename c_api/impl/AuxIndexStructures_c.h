@@ -92,6 +92,30 @@ int faiss_IDSelectorBitmap_new(
         size_t n,
         const uint8_t* bitmap);
 
+FAISS_DECLARE_CLASS(DocIDSelectorBitmap)
+
+int faiss_DocIDSelectorBitmap_new(
+    FaissDocIDSelectorBitmap** p_sel,
+    size_t nids, const uint32_t* idmap,
+    size_t nbytes, const uint8_t* bitmap);
+
+int faiss_DocIDSelectorBitmapInverted_new(
+    FaissDocIDSelectorBitmap** p_sel,
+    size_t nids, const uint32_t* idmap,
+    size_t nbytes, const uint8_t* bitmap);
+
+FAISS_DECLARE_CLASS(DocIDSelectorBitlist)
+
+int faiss_DocIDSelectorBitlist_new(
+    FaissDocIDSelectorBitlist** p_sel,
+    size_t nids, const uint32_t* idmap,
+    size_t npositions, const uint32_t* positions);
+
+int faiss_DocIDSelectorBitlistInverted_new(
+    FaissDocIDSelectorBitlist** p_sel,
+    size_t nids, const uint32_t* idmap,
+    size_t npositions, const uint32_t* positions);
+
 FAISS_DECLARE_CLASS(IDSelectorNot)
 int faiss_IDSelectorNot_new(
         FaissIDSelectorNot** p_sel,
@@ -114,6 +138,176 @@ int faiss_IDSelectorXOr_new(
         FaissIDSelectorXOr** p_sel,
         const FaissIDSelector* lhs_sel,
         const FaissIDSelector* rhs_sel);
+
+int faiss_IDSelectorField_new_LT_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_LT_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_LT_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_LT_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_LTE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_LTE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_LTE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_LTE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_GT_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_GT_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_GT_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_GT_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_GTE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_GTE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_GTE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_GTE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_EQ_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_EQ_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_EQ_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_EQ_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_NE_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_NE_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_NE_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+int faiss_IDSelectorField_new_NE_FLOAT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    float value);
+
+int faiss_IDSelectorField_new_BITAND_BYTE(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    uint8_t value);
+
+int faiss_IDSelectorField_new_BITAND_INT16(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int16_t value);
+
+int faiss_IDSelectorField_new_BITAND_INT32(
+    FaissIDSelector **p_sel,
+    size_t doc_size, size_t offset,
+    const uint8_t *doc_bytes, const uint32_t *doc_ids,
+    int32_t value);
+
+FAISS_DECLARE_CLASS(IDSelectorAll)
+int faiss_IDSelectorAll_new(FaissIDSelector **p_sel);
+FAISS_DECLARE_DESTRUCTOR(IDSelectorAll)
+
+FAISS_DECLARE_CLASS(IDSelectorNone)
+int faiss_IDSelectorNone_new(FaissIDSelector **p_sel);
+FAISS_DECLARE_DESTRUCTOR(IDSelectorNone)
 
 // Below are structures used only by Index implementations
 

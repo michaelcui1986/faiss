@@ -106,6 +106,22 @@ FAISS_DECLARE_GETTER_SETTER(IndexRefineFlat, int, own_fields)
 /// the base_index (should be >= 1)
 FAISS_DECLARE_GETTER_SETTER(IndexRefineFlat, float, k_factor)
 
+FAISS_DECLARE_GETTER(IndexRefineFlat, FaissIndex*, base_index)
+
+FAISS_DECLARE_CLASS_INHERITED(IndexRefine, Index)
+FAISS_DECLARE_INDEX_DOWNCAST(IndexRefine)
+FAISS_DECLARE_GETTER(IndexRefine, float, k_factor)
+FAISS_DECLARE_GETTER(IndexRefine, FaissIndex*, base_index)
+
+/// IndexRefine::search accepts only these params, and only its base index
+/// applies an IDSelector, so the selector goes in base_index_params (borrowed).
+/// k_factor defaults to 1 here, so pass the index's own value.
+FAISS_DECLARE_CLASS_INHERITED(IndexRefineSearchParameters, SearchParameters)
+int faiss_IndexRefineSearchParameters_new_with(
+        FaissIndexRefineSearchParameters** p_sp,
+        float k_factor,
+        FaissSearchParameters* base_index_params);
+
 /** Opaque type for IndexFlat1D
  *
  * optimized version for 1D "vectors"

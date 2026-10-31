@@ -17,6 +17,8 @@
 extern "C" {
 #endif
 
+#define FAISS_VERSION 0x011100
+
 // forward declaration required here
 FAISS_DECLARE_CLASS(RangeSearchResult)
 
@@ -273,6 +275,22 @@ int faiss_Index_sa_decode(
         idx_t n,
         const uint8_t* bytes,
         float* x);
+
+/** compute distances between a set of queries and a bunch of labels (ids)
+ * @param index      opaque pointer to index object
+ * @param n          number of vectors
+ * @param x          input vectors to search, size n * d
+ * @param label      first input label (id)
+ * @param num_labels number of consecutive labels to measure distance for
+ * @param distances  output pairwise distances, size n * num_labels
+ */
+int faiss_Index_compute_distances(
+    const FaissIndex *index,
+    idx_t n,
+    const float *x,
+    idx_t label,
+    idx_t num_labels,
+    float *distances);
 
 #ifdef __cplusplus
 }

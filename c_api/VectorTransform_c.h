@@ -15,6 +15,7 @@
  */
 
 #include "faiss_c.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,6 +116,9 @@ FAISS_DECLARE_GETTER(PCAMatrix, float, eigen_power)
 
 /// Getter for random_rotation
 FAISS_DECLARE_GETTER(PCAMatrix, int, random_rotation)
+
+// Getter and setter for max_points_per_d
+FAISS_DECLARE_GETTER_SETTER(PCAMatrix, size_t, max_points_per_d)
 
 FAISS_DECLARE_CLASS_INHERITED(ITQMatrix, VectorTransform)
 FAISS_DECLARE_DESTRUCTOR(ITQMatrix)

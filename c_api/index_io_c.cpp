@@ -144,3 +144,13 @@ int faiss_read_VectorTransform_fname(
     }
     CATCH_AND_HANDLE
 }
+
+int faiss_write_VectorTransform_fname(
+        const FaissVectorTransform* idx,
+        const char* fname) {
+    try {
+        faiss::write_VectorTransform(
+                reinterpret_cast<const VectorTransform*>(idx), fname);
+    }
+    CATCH_AND_HANDLE
+}

@@ -122,4 +122,82 @@ bool IDSelectorBitmap::is_member(idx_t ii) const {
     return (bitmap[i >> 3] >> (i & 7)) & 1;
 }
 
+/***********************************************************************
+ * DocIDSelectorBitmap
+ ***********************************************************************/
+
+DocIDSelectorBitmap::DocIDSelectorBitmap(
+    size_t idmapLen, const uint32_t *idmap,
+    size_t bitmapLen, const uint8_t *bitmap)
+    : idmapLen(idmapLen), idmap(idmap),
+      bitmapLen(bitmapLen), bitmap(bitmap),
+      inverted(false) {}
+
+DocIDSelectorBitmap::DocIDSelectorBitmap(
+    size_t idmapLen, const uint32_t *idmap,
+    size_t bitmapLen, const uint8_t *bitmap,
+    bool inverted)
+    : idmapLen(idmapLen), idmap(idmap),
+      bitmapLen(bitmapLen), bitmap(bitmap),
+      inverted(inverted) {}
+
+bool DocIDSelectorBitmap::is_member(idx_t ii) const {
+    uint32_t id = ii;
+    if (id < idmapLen) {
+        uint32_t docid = idmap[id];
+        if ((docid >> 3) >= bitmapLen) {
+            return false != inverted;
+        }
+        return (((bitmap[docid >> 3] >> (docid & 7)) & 1) != 0) != inverted;
+    }
+    return false;
+}
+
+/***********************************************************************
+ * DocIDSelectorBitlist
+ ***********************************************************************/
+
+template<typename T>
+bool bsearch(T key, const T *values, size_t num_values) {
+    size_t lower = 0;
+    size_t upper = num_values;
+
+    while (lower < upper) {
+        size_t pos = (lower + upper) >> 1;
+        const T value = values[pos];
+
+        if (key == value)
+            return true;
+
+        if (key < value)
+            upper = pos;
+        else
+            lower = pos + 1;
+    }
+
+    return false;
+}
+
+DocIDSelectorBitlist::DocIDSelectorBitlist(
+    size_t idmapLen, const uint32_t *idmap,
+    size_t positionsLen, const uint32_t *positions)
+        : idmapLen(idmapLen), idmap(idmap),
+          positionsLen(positionsLen), positions(positions),
+          inverted(false) {}
+
+DocIDSelectorBitlist::DocIDSelectorBitlist(
+    size_t idmapLen, const uint32_t *idmap,
+    size_t positionsLen, const uint32_t *positions,
+    bool inverted)
+        : idmapLen(idmapLen), idmap(idmap),
+          positionsLen(positionsLen), positions(positions),
+          inverted(inverted) {}
+
+bool DocIDSelectorBitlist::is_member(idx_t ii) const {
+    uint32_t id = ii;
+    if (id < idmapLen)
+        return bsearch<uint32_t>(idmap[id], positions, positionsLen) != inverted;
+    return false;
+}
+
 } // namespace faiss

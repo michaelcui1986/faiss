@@ -340,6 +340,13 @@ set_target_properties(faiss faiss_avx2 faiss_avx512 faiss_avx512_spr faiss_sve P
   WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
 
+# Disambiguate this build from Argos FAISS 1.x
+foreach(lib faiss faiss_avx2 faiss_avx512 faiss_avx512_spr faiss_sve)
+  set_target_properties(${lib} PROPERTIES
+    OUTPUT_NAME "${lib}_knn"
+  )
+endforeach()
+
 if(WIN32)
   target_compile_definitions(faiss PRIVATE FAISS_MAIN_LIB)
   target_compile_definitions(faiss_avx2 PRIVATE FAISS_MAIN_LIB)
